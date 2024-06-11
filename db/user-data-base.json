@@ -1,0 +1,24 @@
+[
+    {
+        "id": 1,
+        "username": "Muhammed",
+        "email": "kucukaslanmuhammed852@gmail.com",
+        "copyPassword": "uygulama hayırlı olsun hocam",
+        "password": "$2b$10$wgcfpJG4Jr04/nYZOQg43eBUr0cnEBGhBSIdFEsfv.CaNtx/vF0ya",
+        "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imt1Y3VrYXNsYW5tdWhhbW1lZDg1MkBnbWFpbC5jb20iLCJpYXQiOjE3MTgwODc4MjgsImV4cCI6MTcxODE3NDIyOH0.POqujrTlnN2qMiMAfj0Dxo_ISxW4AsCx6Kqz_EolO2I"
+    },
+    {
+        "id": 2,
+        "username": "Eren",
+        "email": "hafiz@gmail.com",
+        "copyPassword": "eren bas bas",
+        "password": "$2b$10$5hdRjqwDKZ3dS/KzYi35/u.llj3337y2JQt2814RdQOIy9Fc.13W."
+    },
+    {
+        "id": 3,
+        "username": "Ömer",
+        "email": "oyunmoyun@gmail.com",
+        "copyPassword": "çok yakışıklısın ömer",
+        "password": "$2b$10$Qhyd9o5rQzetMOeiMkKl4ueRDoEQKJAzqzC9B4b1Qf1Wy6bYxbHCO"
+    }
+]
