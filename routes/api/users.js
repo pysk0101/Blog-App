@@ -1,9 +1,12 @@
 import express from "express"
 const router = express.Router()
 
-import  {getUsers,deleteUser,getUser,updateUser} from "../../controllers/userController.js"
 
-router.get("/", getUsers).delete("/", deleteUser).put("/", updateUser)
-router.get("/:id", getUser)
+
+
+import  {deleteUser,updateUser} from "../../controllers/userController.js"
+
+router.delete("/", deleteUser).put("/", updateUser)
+
 
 export default router

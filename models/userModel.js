@@ -5,9 +5,9 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
     id: {
         type: Number,
-        required: true
+        required: false
     },
-    name: {
+    username: {
         type: String,
         required: true
     },
@@ -18,6 +18,14 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true
+    },
+    hasPassword: {
+        type: String,
+        required: true
+    },
+    refreshToken: {
+        type: String,
+        required: false
     },
     createdAt:  {
         type: Date,
@@ -30,21 +38,11 @@ const userSchema = new Schema({
         
 })
 
-const deneme = new Schema({
-    name : {
-        type: String,
-        required: true
-    },
-    age : {
-        type: Number,
-        required: true
-    }
-})
 
 
-const Deneme = mongoose.model('Deneme', deneme);
+
 const User = mongoose.model('User', userSchema);
 
 
-export {User, Deneme};
+export default User;
 

@@ -1,65 +1,35 @@
-import fs from "fs";
-import path from "path";
-import bcrypt from "bcrypt";
-
-
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const fsPromises = fs.promises;
-
-const filePath = path.join(__dirname, '..', 'db', 'user-data-base.json');
-
-async function loadUsers() {
-    const data = await fsPromises.readFile(filePath, 'utf-8');
-    return JSON.parse(data);
-}   
-
-const usersDB = {
-    users: await loadUsers(),
-    setUsers: function(data) {
-        this.users = data;
-    }
-};
-
+import Users from '../models/userModel.js' 
+import bcrypt from 'bcrypt'
 
 const registerController = async (req, res) => {
     const {  username, email, password } =  req.body;
     if (!username || !email || !password) res.status(400).send("Tüm alanları doldurunuz")
 
-    const deplicate = usersDB.users.find(user => user.email === email)
-    const copyPassword = password
-    
-    if (deplicate) return res.sendStatus(409);
+    const duplicate = await  Users.findOne({ email: email });
+    if (duplicate) return res.status(409).send("Bu email zaten kayıtlı");
 
     try {
         const hashedPwd= await bcrypt.hash(password, 10);
-        const newUser = {
-            id: usersDB.users[usersDB.users.length-1].id+ 1, 
+        
+        const users = await Users.find()
+        const lastId = users[users.length-1].id
+        console.log(users)
+        const newUser = new Users({
+            id: lastId + 1,
             username,
             email,
-            copyPassword,
-            password: hashedPwd
-        }
+            password,
+            hasPassword : hashedPwd
+        })
 
-        usersDB.setUsers([...usersDB.users, newUser])
+         newUser.save().then(() => {
+            res.status(201).json({ 'message': 'User registered successfully' })
+        })
         
-        await fsPromises.writeFile(
-            filePath,
-            JSON.stringify(usersDB.users)
-        );
-        
-        res.status(201).send("Kullanıcı oluşturuldu")
-    
-
     } catch (error) {
         res.status(500).json({ 'message': error.message })
     }
 }
 
-const showRegisterPage = (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/register.html'));
-}
 
-export  {registerController,showRegisterPage}
+export  {registerController}

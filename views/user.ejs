@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kullanıcı Detayları</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .user-details {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .user-details h2 {
+            margin-bottom: 10px;
+        }
+
+        .user-details p {
+            margin-bottom: 8px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #2196F3;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 9px 20px;
+            background-color: #2196F3;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="user-details">
+        <h2>Kullanıcı Detayları</h2>
+        <p><strong>Ad:</strong> <span id="userName"></span></p>
+        <p><strong>Email:</strong> <span id="userEmail"></span></p>
+        <button id="viewUsersPage">Kayıtlı Kullanıcılar Sayfasına Dön</button>
+        <a href="/logout">Çıkış Yap</a>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const userId = window.location.search.substring(1); // Get user id from query string
+
+            const user = users.find(u => u.email === userId); // Assuming email is unique
+
+            if (user) {
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('userEmail').textContent = user.email;
+            } else {
+                // Handle user not found scenario
+                alert('Kullanıcı bulunamadı!');
+            }
+        });
+
+        document.getElementById('viewUsersPage').addEventListener('click', function () {
+            window.location.href = '/users';
+        });
+    </script>
+
+</body>
+
+</html>

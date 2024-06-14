@@ -1,54 +1,31 @@
-import fs from "fs";
-import path from "path";
-import bcrypt from "bcrypt";
-
-import jwt from "jsonwebtoken";
-
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const fsPromises = fs.promises;
-
-const filePath = path.join(__dirname, '..', 'db', 'user-data-base.json');
-
-async function loadUsers() {
-    const data = await fsPromises.readFile(filePath, 'utf-8');
-    return JSON.parse(data);
-}
-
-const usersDB = {
-    users: await loadUsers(),
-    setUsers: function (data) {
-        this.users = data;
-    }
-};
+import Users from '../models/userModel.js' 
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 
 const authController = async (req, res) => {
+    
     const { username, email, password } = req.body;
     if (!username || !email || !password) res.status(400).send("Tüm alanları doldurunuz");
 
-    const newUser = usersDB.users.find(user => user.email === email);
+    const newUser = await Users.findOne({email:email});
     if (!newUser) return res.status(404).send("Kullanıcı bulunamadı");
+    console.log(password)
+    console.log(newUser.hasPassword)
 
-    const matchPwd = await bcrypt.compare(password, newUser.password)
+    const matchPwd = await bcrypt.compare(password, newUser.hasPassword) // ilk önce loginde girilen password, sonraki bizim db'deki hashlenmiş password
+    
     try {
         if (matchPwd) {
+            
             const token = jwt.sign({ email: newUser.email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10m' });
             const refreshToken = jwt.sign({ email: newUser.email }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
-            
-            const otherUsers = usersDB.users.filter(person => person.username !== newUser.username);
-            const currentUser = { ...newUser, refreshToken };
-            
-            usersDB.setUsers([...otherUsers, currentUser]);
-            
-            await fsPromises.writeFile(
-                path.join(__dirname, '..', 'db', 'user-data-base.json'),
-                JSON.stringify(usersDB.users)
-            )
-            res.send({ token });
-        }
 
+            
+            newUser.refreshToken = refreshToken;
+            await newUser.save();
+            
+            res.send({ token});
+        }
         res.status(401).send("Hatalı şifre");
 
 
