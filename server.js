@@ -16,10 +16,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-app.use(express.static(path.join(__dirname, '/public')));
-
-
-
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -43,6 +39,9 @@ connectDB()
 
 
 
+app.get("/yasaklandın", (req, res) => {
+  res.send("ban yedin puahaha")
+})
 
 app.use("/register", registerRouter);
 app.use("/auth", authRouter);

@@ -14,7 +14,7 @@ const refreshTokenController = async (req, res) => {
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
         if (err) return res.sendStatus(403);
         //decoded= paylod kısmı
-        const token = jwt.sign({ email: decoded.email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10m' });
+        const token = jwt.sign({ email: decoded.email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
         res.json({ token });
     })
     } catch (error) {

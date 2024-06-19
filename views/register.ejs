@@ -57,6 +57,20 @@
 
 
 <script>
+    document.addEventListener("DOMContentLoaded",
+        fetch("/users").then(response => response.json()).then(users => {
+            const userTableBody = document.getElementById('userTableBody');
+            users.forEach(user => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                `;
+                userTableBody.appendChild(tr);
+            });
+        }).catch(error => "Hata oluştu!")
+    )
+
     document.getElementById('registrationForm').addEventListener('submit', function(event) {
         event.preventDefault();
 
