@@ -7,6 +7,8 @@ const app = express();
 dotenv.config()
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 //?Routes
 import registerRouter from './routes/register.js';
 import authRouter from './routes/auth.js';
