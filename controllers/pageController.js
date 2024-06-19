@@ -2,27 +2,20 @@
 
 
 const getHomepage = async (req, res) => {
-    res.render("homepage.ejs")
+    res.send("Welcome to the homepage!")
 }
 
 const openLogin = async (req, res) => {
-    res.render("login.ejs")
+    res.send("Login page")
 }
 
-const getUserPage = async (req, res) => {
-    res.render("user.ejs")
-}
 
 const openRegister = async (req, res) => {
-    res.render("register.ejs")
-}
-
-const getUsers = async (req, res) => {
-    res.render("users.ejs")
+    res.send("Welcome to the registration page!")
 }
 
 const noFound = async (req, res) => {
-    res.render("404.ejs")
+    res.status(400).send("The page you are looking for does not exist!")
 }
 
-export { getHomepage, openLogin, openRegister, getUsers,getUserPage ,noFound }
+export { getHomepage, openLogin, openRegister,noFound }
