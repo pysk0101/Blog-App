@@ -19,14 +19,6 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    hasPassword: {
-        type: String,
-        required: true
-    },
-    refreshToken: {
-        type: String,
-        required: false
-    },
     createdAt:  {
         type: Date,
         default: Date.now
