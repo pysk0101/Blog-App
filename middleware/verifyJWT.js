@@ -2,17 +2,20 @@ import jwt from 'jsonwebtoken';
 import dotenv from "dotenv"
 dotenv.config()
 
+import refreshToken from './refreshToken.js';
+
 const verifyJWT = async (req, res, next) => {
     
     try {
-
-        const token = req.headers["authorization"]?.split(" ")[1];
+        
+        const token = req.cookies.at    
        
-        if (!token) return res.status(403).send("Pls login first")
+        if (!token) return res.status(403).redirect("/login")
+        
 
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-            if (err) return res.status(403).send("Invalid Token")
-            next()
+            if (err) refreshToken(req, res)
+            next() //bir sonraki middleware e geçiriyor
         })
     }
     catch (error) {
