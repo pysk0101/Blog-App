@@ -4,9 +4,11 @@ const router = express.Router()
 import verifyJWT from '../../middleware/verifyJWT.js';
 
 
-import  {getUsers, readUser ,deleteUser,updateUser} from "../../controllers/userController.js"
+import  {readUser ,deleteUser,updateUsername,updateUserpassword} from "../../controllers/userController.js"
  
-router.get("/",verifyJWT, getUsers ).get("/:id", verifyJWT, readUser).delete("/:id", deleteUser).put("/:id", updateUser)
+router.get("/@:username", verifyJWT, readUser).get("/delete/:username", deleteUser)
+
+router.post("/updateusername/:username", updateUsername).post("/updatepassword/:username", updateUserpassword)
 
 
 export default router

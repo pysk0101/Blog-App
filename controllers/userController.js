@@ -1,22 +1,23 @@
 import Users from '../models/userModel.js'
+import bcrypt, { hash } from "bcrypt"
 
 const deleteUser = async (req, res) => {
     try {
-        const result = await Users.deleteOne({ id: req.params.id });
-        if (result.deleteCount === 0) return res.status(400).json({ "message": "User not found" })
-
-        res.sendStatus(200)
+        const result = await Users.deleteOne({ username: req.params.username });
+        if (result.deletedCount === 0) return res.status(400).json({ "message": "User not found" })
+        res.redirect("/")
+            
     } catch (error) {
         res.status(500).send({ message: 'An error occurred', error });
     }
 }
 
 const readUser = async (req, res) => {
-    const id = parseInt(req.params.id);
-    const user = await Users.findOne({ id: id });
-    if (!user) return res.status(400).json({ "message": `User ID ${req.params.id} not found` })
-    
-    res.render("user",{user:user})
+    const username = req.params.username;
+    const user = await Users.findOne({ username: username });
+    if (!user) return res.status(400).json({ "message": `User ${req.params.username} not found` })
+
+    res.render("user-profile", { user: user })
 }
 
 const getUsers = async (req, res) => {
@@ -24,16 +25,33 @@ const getUsers = async (req, res) => {
     res.render("users", { users: users })
 }
 
+const updateUsername = async (req, res) => {
+    const user = await Users.findOne({ username: req.params.username })
+    user.username = req.body.newUsername
+    await user.save()
 
-const updateUser = async (req, res) => {
-    const user = await Users.updateOne({ id: req.params.id }, {
-        $set: {
-            username: req.body.username,
-        }
-    });
-
-    if (!user) return res.status(400).json({ "message": `User ID ${req.params.id} not found` });
-    res.send(user)
+    if (!user) return res.status(400).json({ "message": `User  ${req.params.username} not found` });
+    res.redirect(`/myprofile/@${user.username}`)
 }
-export { getUsers, readUser, deleteUser, updateUser }
+
+const updateUserpassword = async (req, res) => {
+    try {
+        const user = await Users.findOne({ username: req.params.username })
+
+        const matchPwd = await bcrypt.compare(req.body.currentPassword, user.password)
+        if (!matchPwd) return res.status(400).send("Hatalı şifre");
+
+        const hashedPwd = await bcrypt.hash(req.body.newPassword, 10)
+        user.password = hashedPwd
+        await user.save()
+        res.redirect(`/myprofile/@${user.username}`)
+
+
+    } catch (error) {
+        res.status(400).send({ message: 'An error occurred', error })
+    }
+}
+
+
+export { getUsers, readUser, deleteUser, updateUsername, updateUserpassword }
 

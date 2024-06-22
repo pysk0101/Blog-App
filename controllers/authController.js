@@ -26,8 +26,8 @@ const authController = async (req, res) => {
             res.cookie('at', token, { httpOnly: true });
             res.cookie('rt', refreshToken, { httpOnly: true });
 
-            const id= newUser.id
-            res.redirect(`/users/${id}`);
+            const username= newUser.username
+            res.redirect(`/myprofile/@${username}`);
         } else {
             res.status(401).send("Hatalı şifre");
         }
