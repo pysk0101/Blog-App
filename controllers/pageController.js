@@ -2,20 +2,23 @@
 
 
 const getHomepage = async (req, res) => {
-    res.send("Welcome to the homepage!")
+    res.render("homepage")
 }
 
 const openLogin = async (req, res) => {
-    res.send("Login page")
+    res.render("login")
 }
 
-
 const openRegister = async (req, res) => {
-    res.send("Welcome to the registration page!")
+    res.render("register")
+}
+const bannedPage = async (req, res) => {
+    res.status(400).render("banned")
 }
 
 const noFound = async (req, res) => {
-    res.status(400).send("The page you are looking for does not exist!")
+    res.status(400).render("404")
 }
 
-export { getHomepage, openLogin, openRegister,noFound }
+
+export { getHomepage, openLogin, openRegister, bannedPage, noFound }
