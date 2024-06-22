@@ -12,14 +12,16 @@ const deleteUser = async (req, res) => {
 }
 
 const readUser = async (req, res) => {
-    const user = await Users.findOne({ id: req.params.id });
-    if (!user) return res.status(400).json({ "message": `User ID ${req.params.id} not found` });
-    res.send(user)
+    const id = parseInt(req.params.id);
+    const user = await Users.findOne({ id: id });
+    if (!user) return res.status(400).json({ "message": `User ID ${req.params.id} not found` })
+    
+    res.render("user",{user:user})
 }
 
 const getUsers = async (req, res) => {
     const users = await Users.find()
-    res.send(users)
+    res.render("users", { users: users })
 }
 
 
