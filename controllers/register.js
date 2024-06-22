@@ -13,21 +13,18 @@ const registerController = async (req, res) => {
         
         const users = await Users.find()
         const lastId = users[users.length-1].id
-        console.log(users)
+       
         const newUser = new Users({
             id: lastId + 1,
             username,
             email,
-            password,
-            hasPassword : hashedPwd
+            password: hashedPwd
         })
 
-         newUser.save().then(() => {
-            res.status(201).json({ 'message': 'User registered successfully' })
-        })
-        
+        await newUser.save()
+        res.redirect("/login")
     } catch (error) {
-        res.status(500).json({ 'message': error.message })
+        res.status(500).redirect("/register")
     }
 }
 
