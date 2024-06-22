@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Sayfası</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background-color: #2196F3;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 15px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-header h2 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .profile-header p {
+            color: #666;
+            margin: 0;
+        }
+
+        .blog-post {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .blog-post h3 {
+            margin-top: 0;
+            color: #555;
+        }
+
+        .blog-post p {
+            color: #777;
+        }
+
+        .blog-post a {
+            display: inline-block;
+            margin-top: 10px;
+            color: #2196F3;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .blog-post a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/users">Kullanıcılara Geri Dön</a>
+    </nav>
+
+    <div class="container">
+        <div class="profile-header">
+            <h2><%= user.username %>'nin Profili</h2>
+            <p>Email: <%= user.email %></p>
+        </div>
+
+        <div class="blog-list">
+            <% if (user.blogs.length > 0) { %>
+                <% user.blogs.forEach(blog => { %>
+                    <div class="blog-post">
+                        <h3><strong><%= blog.title %></strong></h3>
+                        <p><%= blog.content %></p>
+                        <!-- <a href=" blog.link ">Read more</a> -->
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <p>Bu kullanıcı henüz blog eklememiş.</p>
+            <% } %>
+        </div>
+    </div>
+</body>
+
+</html>
