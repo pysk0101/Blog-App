@@ -1,4 +1,4 @@
-import mongoose  from 'mongoose';
+import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
@@ -19,7 +19,21 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    createdAt:  {
+    blogs: [{
+        title: {
+            type: String,
+            required: true
+        },
+        content: {
+            type: String,
+            required: true
+        },
+        link: {
+            type: String,
+            required: false
+        }}]
+    ,
+    createdAt: {
         type: Date,
         default: Date.now
     },
@@ -27,7 +41,7 @@ const userSchema = new Schema({
         type: Date,
         default: Date.now
     }
-        
+
 })
 
 
