@@ -1,7 +1,7 @@
 import express from "express"
 const router = express.Router()
 
-import  refreshTokenController from "../controllers/refreshTokenController.js"
+import  refreshTokenController from "../middleware/refreshToken.js"
 
 router.get("/", refreshTokenController)
 
