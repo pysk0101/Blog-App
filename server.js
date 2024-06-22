@@ -24,13 +24,18 @@ import authRouter from './routes/auth.js';
 import logoutRouter from './routes/logout.js';
 import userRouter from './routes/api/users.js';
 import pageRouter from './routes/pages/page.js';
+import blogRouter from './routes/api/blog.js';
+
+
+
 
 
 //APIs
+app.use("/blog", blogRouter);
 app.use("/register", registerRouter);
 app.use("/login", authRouter);
 app.use("/logout", logoutRouter);
-app.use("/users", userRouter)
+app.use("/myprofile", userRouter)
 app.use("/", pageRouter);
 
 
