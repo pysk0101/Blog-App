@@ -23,10 +23,18 @@ const authController = async (req, res) => {
             const token = jwt.sign({ email: newUser.email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '20s' });
             const refreshToken = jwt.sign({ email: newUser.email }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
 
-            res.cookie('at', token, { httpOnly: true });
-            res.cookie('rt', refreshToken, { httpOnly: true });
+            res.cookie('at', token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none'
+            });
+            res.cookie('rt', refreshToken, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none'
+            });
 
-            const username= newUser.username
+            const username = newUser.username
             res.redirect(`/myprofile/@${username}`);
         } else {
             res.status(401).send("Hatalı şifre");
