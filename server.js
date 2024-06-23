@@ -3,10 +3,18 @@ import express from 'express';
 import connectDB from './config/db.js';
 import dotenv from "dotenv"
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 
 const app = express();
 dotenv.config()
+
+//Security
+app.use(cors({
+  origin: "http://localhost:5000",
+  methods: "HEAD,PUT,PATCH,DELETE,OPTIONS",
+  credentials: true
+}));
 
 
 //Middlewares
