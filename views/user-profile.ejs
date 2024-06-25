@@ -116,6 +116,7 @@
         .blog-item .actions button {
             margin-left: 5px;
         }
+
         .popup {
             display: none;
             position: fixed;
@@ -147,13 +148,20 @@
             font-weight: bold;
         }
 
-        .popup-content input {
+        .popup-content input,
+        .popup-content textarea {
             width: calc(100% - 22px);
             padding: 10px;
             margin-bottom: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
         }
+
+        .popup-content textarea {
+            resize: vertical;
+            height: 100px;
+        }
+
         .close-btn {
             background-color: #f44336;
             margin-top: 10px;
@@ -165,20 +173,14 @@
 
     <div class="user-details">
         <h2>Kullanıcı Detayları</h2>
-        <p><strong>Ad:</strong> <span id="userName">
-                <%= user.username %>
-            </span></p>
-        <p><strong>Email:</strong> <span id="userEmail">
-                <%= user.email %>
-            </span></p>
-        <p><strong>Şifre:</strong> <span id="userPassword">********</span>
-        
+        <p><strong>Ad:</strong> <span id="userName"><%= user.username %></span></p>
+        <p><strong>Email:</strong> <span id="userEmail"><%= user.email %></span></p>
+        <p><strong>Şifre:</strong> <span id="userPassword">********</span></p>
+
         <div class="actions">
             <button onclick="openPopup('username')">Kullanıcı Adımı Değiştir</button>
             <button onclick="openPopup('password')">Şifremi Değiştir</button>
         </div>
-
-        
 
         <div class="blog-form">
             <h3>Blog Ekle</h3>
@@ -196,46 +198,38 @@
         <div class="blog-list">
             <h3>Bloglarım</h3>
             <% user.blogs.forEach(function(blog) { %>
-                <div class="blog-item">
-                    <h4>
-                        <%= blog.title %>
-                    </h4>
-                    <p>
-                        <%= blog.content %>
-                    </p>
+                <div class="blog-item" data-id="<%= blog.id %>" data-title="<%= blog.title %>" data-content="<%= blog.content %>">
+                    <h4><%= blog.title %></h4>
+                    <p><%= blog.content %></p>
                     <div class="actions">
-                        <form action="/blog/<%= blog.id %>/edit" method="GET">
-                            <button type="submit">Düzenle</button>
-                        </form>
-                        <form action="/blog/<%= blog.id %>" method="POST"
-                            onsubmit="return confirm('Bu blogu silmek istediğinizden emin misiniz?');">
+                        <button onclick="openBlogPopup(this)">Düzenle</button>
+                        <form action="/blog/<%= blog.id %>" method="POST" onsubmit="return confirm('Bu blogu silmek istediğinizden emin misiniz?');">
                             <input type="hidden" name="_method" value="DELETE">
                             <button type="submit">Sil</button>
                         </form>
                     </div>
                 </div>
-                <% }); %>
+            <% }); %>
         </div>
-        <div class="actions">
-            <a href="/" ">Anasayfaya Dön</a>
-            <form action=" /logout" method="GET">
-                <button style="background-color: red;" type="submit">Çıkış Yap</button>
-                </form>
-                <form action="/myprofile/delete/<%= user.username %>" method="GET">
-                    <button style="background-color: red;" type="submit">Hesabımı Sil</button>
-                </form>
 
+        <div class="actions">
+            <a href="/">Anasayfaya Dön</a>
+            <form action="/logout" method="GET">
+                <button style="background-color: red;" type="submit">Çıkış Yap</button>
+            </form>
+            <form action="/myprofile/delete/<%= user.username %>" method="GET">
+                <button style="background-color: red;" type="submit">Hesabımı Sil</button>
+            </form>
         </div>
     </div>
-    
+
+    <!-- Kullanıcı Adı Değiştirme Pop-up -->
     <div id="username-popup" class="popup">
         <div class="popup-content">
             <h3>Kullanıcı Adı Değiştir</h3>
             <form action="/myprofile/updateusername/<%= user.username %>" method="POST">
-
                 <label for="newUsername">Yeni Kullanıcı Adı</label>
                 <input type="text" id="newUsername" name="newUsername" required>
-
                 <button type="submit">Güncelle</button>
                 <button type="button" class="close-btn" onclick="closePopup('username')">Kapat</button>
             </form>
@@ -246,33 +240,59 @@
     <div id="password-popup" class="popup">
         <div class="popup-content">
             <h3>Şifre Değiştir</h3>
-            <form action="/myprofile/updatepassword/<%= user.username %>"  method="POST">
+            <form action="/myprofile/updatepassword/<%= user.username %>" method="POST">
                 <label for="currentPassword">Mevcut Şifre</label>
                 <input type="password" id="oldPassword" name="currentPassword" required>
-
                 <label for="newPassword">Yeni Şifre</label>
                 <input type="password" id="newPassword" name="newPassword" required>
-
                 <label for="confirmNewPassword">Yeni Şifre Tekrar</label>
                 <input type="password" id="confirmNewPassword" name="confirmNewPassword" required>
-
                 <button type="submit">Güncelle</button>
                 <button type="button" class="close-btn" onclick="closePopup('password')">Kapat</button>
             </form>
         </div>
     </div>
 
+    <!-- Blog Düzenleme Pop-up -->
+    <div id="blog-popup" class="popup">
+        <div class="popup-content">
+            <h3>Blog Düzenle</h3>
+            <form id="blogEditForm" method="POST">
+                <label for="editTitle">Blog Başlığı</label>
+                <input type="text" id="editTitle" name="title" required>
+                <label for="editContent">İçerik</label>
+                <textarea id="editContent" name="content" required></textarea>
+                <button type="submit">Güncelle</button>
+                <button type="button" class="close-btn" onclick="closePopup('blog')">Kapat</button>
+            </form>
+        </div>
+    </div>
+
     <script>
         function openPopup(type) {
-            document.getElementById(`${type}-popup`).style.display = 'flex';
+            document.getElementById(type + '-popup').style.display = 'flex';
         }
 
         function closePopup(type) {
-            document.getElementById(`${type}-popup`).style.display = 'none';
+            document.getElementById(type + '-popup').style.display = 'none';
+        }
+
+        function openBlogPopup(button) {
+            var blogItem = button.closest('.blog-item');
+            var blogId = blogItem.getAttribute('data-id');
+            var blogTitle = blogItem.getAttribute('data-title');
+            var blogContent = blogItem.getAttribute('data-content');
+
+            var blogEditForm = document.getElementById('blogEditForm');
+            // blogEditForm.action = '/updateblog?id=}&username=}';
+            blogEditForm.action = '/blog/updateblog?id=1&username=Muhammed';
+           
+            document.getElementById('editTitle').value = blogTitle;
+            document.getElementById('editContent').value = blogContent;
+
+            openPopup('blog');
         }
     </script>
-
-    
 </body>
 
 </html>
