@@ -20,6 +20,10 @@ const userSchema = new Schema({
         required: true
     },
     blogs: [{
+        id: {
+            type: Number,
+            required: false
+        },
         title: {
             type: String,
             required: true

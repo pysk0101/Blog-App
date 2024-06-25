@@ -31,7 +31,7 @@ const authController = async (req, res) => {
             res.cookie('rt', refreshToken, {
                 httpOnly: true,
                 secure: true,
-                sameSite: 'none'
+                sameSite: 'none' 
             });
 
             const username = newUser.username
