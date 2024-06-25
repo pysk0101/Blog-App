@@ -1,8 +1,10 @@
 import express from "express"
 const router = express.Router()
 
-import {createBlog} from "../../controllers/blogController.js"
+import {createBlog,updateBlog} from "../../controllers/blogController.js"
 
-router.post("/:username", createBlog)
+router.post("/updateblog", updateBlog).post("/:username", createBlog)
+
+
  
 export default router
