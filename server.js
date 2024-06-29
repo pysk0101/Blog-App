@@ -35,9 +35,6 @@ import pageRouter from './routes/pages/page.js';
 import blogRouter from './routes/api/blog.js';
 
 
-
-
-
 //APIs
 app.use("/blog", blogRouter);
 app.use("/register", registerRouter);
