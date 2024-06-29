@@ -1,9 +1,9 @@
 import express from "express"
 const router = express.Router()
 
-import {createBlog,updateBlog} from "../../controllers/blogController.js"
+import {createBlog,updateBlog, deleteBlog} from "../../controllers/blogController.js"
 
-router.post("/updateblog", updateBlog).post("/:username", createBlog)
+router.post("/updateblog", updateBlog).post("/delete", deleteBlog).post("/:username", createBlog)
 
 
  

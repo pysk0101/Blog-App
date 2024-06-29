@@ -10,7 +10,9 @@ const verifyJWT = async (req, res, next) => {
        
         const token = req.cookies.at    
        
-        if (!token) return res.status(403).redirect("/login")        
+        // if (!token) return res.status(403).redirect("/login")
+        if (!token) return res.status(403).render("banned")
+        
         
         
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {

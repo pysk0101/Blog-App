@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 
 const registerController = async (req, res) => {
     const {  username, email, password } =  req.body;
+    console.log(req.body)
     if (!username || !email || !password) res.status(400).send("Tüm alanları doldurunuz")
 
     const duplicate = await  Users.findOne({ email: email });
